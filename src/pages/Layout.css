@@ -1,0 +1,23 @@
+.App {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+.side-bar {
+  background-color: #574fd8;
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 85%;
+}
+
+.main {
+  background-color: grey;
+  height: 70%;
+}

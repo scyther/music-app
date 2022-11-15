@@ -1,0 +1,19 @@
+
+.App-header {
+    background-color: #ffb5a7;
+    height: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .text {
+    padding: 30px;
+    color: #fafafa;
+  }
+  .icon-Image{
+    height: 20px
+  }
+  .LottieImage {
+    height: 100%;
+  }
