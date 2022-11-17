@@ -1,4 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Favourites from "./pages/Favourites";
 import HomePage from "./pages/HomePage";
@@ -9,23 +8,44 @@ import PrivateRoute from "./utils/PrivateRoute";
 
 const AppRoutes = () => {
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="search" element={<Search />} />
-            <Route path="favourites" element={<Favourites />} />
-            <Route
-              path="playlists"
-              element={
-                <PrivateRoute>
-                  <Playlists />
-                </PrivateRoute>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route
+            index
+            element={
+              <PrivateRoute>
+                <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="search"
+            element={
+              <PrivateRoute>
+                <Search />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="favourites"
+            element={
+              <PrivateRoute>
+                <Favourites />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="playlists"
+            element={
+              <PrivateRoute>
+                <Playlists />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

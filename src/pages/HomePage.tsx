@@ -1,8 +1,11 @@
+import SongsCaraousel from "../components/SongsCaraousel";
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
-  )
-}
+    <div>
+      <SongsCaraousel listID="genre-global-chart-1" name="Pop" />
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;
