@@ -15,16 +15,20 @@ const SearchCarousel: React.FC<{
         {name}
       </h6>
       <hr />
-      <Carousel cols={7} rows={1} gap={10} loop mobileBreakpoint={10}>
-        {data?.map((item: TrackObject) => (
-          <Carousel.Item
-            key={item.track.key}
-            style={{ height: "100px", zIndex: -1 }}
-          >
-            <TrackCard item={item} inFavourites={name === 'Favourites'} />
-          </Carousel.Item>
-        ))}
-      </Carousel>
+      {data.length === 0 ? (
+        <div>Nothing to Display</div>
+      ) : (
+        <Carousel cols={5} rows={1} gap={10} loop>
+          {data?.map((item: TrackObject) => (
+            <Carousel.Item
+              key={item.track.key}
+              style={{ height: "100px", zIndex: -1 }}
+            >
+              <TrackCard item={item} inFavourites={name === "Favourites"} />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      )}
     </div>
   );
 };
