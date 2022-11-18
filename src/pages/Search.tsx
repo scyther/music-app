@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { autoComplete, search } from "../api/search";
 import SearchCarousel from "../components/SearchCarousel";
+import { TrackObject } from "../interfaces/search";
 
 export interface hint {
   id?: number;
@@ -58,11 +59,21 @@ const Search: React.FC = () => {
         <>
           <h4 className="mt-10">Search Results: </h4>
           <div>
-            <SearchCarousel name="Tracks" data={searchedTracks} />
+            <SearchCarousel
+              name="Tracks"
+              data={searchedTracks.map(
+                (trackObject: TrackObject) => trackObject.track
+              )}
+            />
           </div>
 
-          {!searchedArtists && (
-            <SearchCarousel name="Artists" data={searchedTracks} />
+          {searchedArtists && (
+            <SearchCarousel
+              name="Artists"
+              data={searchedArtists.map(
+                (trackObject: TrackObject) => trackObject.track
+              )}
+            />
           )}
         </>
       )}

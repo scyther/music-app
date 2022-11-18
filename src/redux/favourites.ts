@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { TrackObject } from '../interfaces/search'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { Track } from '../interfaces/corousel'
 
 export interface Favourites {
     reload: Boolean,
-    favourites: TrackObject[] | []
+    favourites: Track[] | []
 }
 
 const initialState: Favourites = {
@@ -17,10 +17,9 @@ export const favouritesSlice = createSlice({
     initialState,
     reducers: {
         toggleReload: (state, action: PayloadAction<Boolean>) => {
-            console.log(state.reload)
             state.reload = !action.payload
         },
-        setFavourites: (state, action: PayloadAction<TrackObject[]>) => {
+        setFavourites: (state, action: PayloadAction<Track[]>) => {
             state.favourites = action.payload
         }
     },

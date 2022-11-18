@@ -1,6 +1,6 @@
 // import { TrackObject } from "../interfaces/search";
 
-import { TrackObject } from "../interfaces/search";
+import { Track } from "../interfaces/corousel";
 
 export const updatePlaylistName = (pName: string, next: Function) => {
 	let playlists = [];
@@ -19,15 +19,18 @@ export const updatePlaylistName = (pName: string, next: Function) => {
 export const loadPlaylistNames = () => {
 	if (typeof window !== "undefined") {
 		if (localStorage.getItem("playlists")) {
-			return JSON.parse(localStorage.getItem("playlists") || "{}");
+			const pNames = JSON.parse(localStorage.getItem("playlists") || "[]");
+			return [...pNames,]
 		}
 	}
+	return []
 };
 
 export const loadPlaylist = (pName: string) => {
 	if (typeof window !== "undefined") {
 		if (localStorage.getItem(pName)) {
-			return JSON.parse(localStorage.getItem(pName) || "[]");
+			let playlist = JSON.parse(localStorage.getItem(pName) || "[]");
+			return playlist
 		}
 	}
 };
@@ -35,6 +38,9 @@ export const loadPlaylist = (pName: string) => {
 export const deletePlaylist = (pName: string, next: Function) => {
 	let playlists: string[] = [];
 	if (typeof window !== "undefined") {
+		if (localStorage.getItem(pName)) {
+			localStorage.removeItem(pName)
+		}
 		if (localStorage.getItem("playlists")) {
 			playlists = JSON.parse(localStorage.getItem("playlists") || "{}");
 			playlists.map((playlistName: string, index: number) => {
@@ -50,15 +56,15 @@ export const deletePlaylist = (pName: string, next: Function) => {
 	}
 };
 
-export const addToPlaylist = (pName: string, track: TrackObject | {}, next: Function) => {
+export const addToPlaylist = (pName: string, track: Track | undefined, next: Function) => {
 	let playlist = [];
 	let tempPlaylist = []
 	if (typeof window !== "undefined") {
 		if (localStorage.getItem(pName)) {
 			tempPlaylist = JSON.parse(localStorage.getItem(pName) || "[]");
 		}
-		tempPlaylist.push(track)
-		playlist = Array.from(new Set(tempPlaylist))
+		console.log((tempPlaylist.find((item: Track) => (item.key === track?.key)) === undefined) ? tempPlaylist.push(track) : tempPlaylist)
+		playlist = (tempPlaylist.find((item: Track) => (item.key === track?.key)) === undefined) ? tempPlaylist.push(track) : tempPlaylist
 		localStorage.setItem(pName, JSON.stringify(playlist));
 		next();
 	}

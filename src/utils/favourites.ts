@@ -1,13 +1,14 @@
+import { Track } from "../interfaces/corousel";
 import { TrackObject } from "../interfaces/search";
 
-export const addToFavourites = (item: TrackObject, next: Function) => {
-    let favourites: TrackObject[] = [];
-    let tempfavourites : TrackObject[]= []
+export const addToFavourites = (item: Track, next: Function) => {
+    let favourites: Track[] = [];
+    let tempfavourites : Track[]= []
     if (typeof window !== "undefined") {
         if (localStorage.getItem("favourites")) {
             tempfavourites = JSON.parse(localStorage.getItem("favourites") || "{}");
         }
-        tempfavourites.push({ ...item });
+        tempfavourites.push(item);
         favourites = Array.from(new Set(tempfavourites))
         localStorage.setItem("favourites", JSON.stringify(favourites));
         next();
@@ -16,12 +17,12 @@ export const addToFavourites = (item: TrackObject, next: Function) => {
 
 
 export const removeFromFavourites = (key : string, next: Function) => {
-	let favourites : TrackObject[]= [];
+	let favourites : Track[]= [];
 	if (typeof window !== "undefined") {
 		if (localStorage.getItem("favourites")) {
 			favourites = JSON.parse(localStorage.getItem("favourites") || "{}");
-			favourites.map((product : TrackObject, index : number) => {
-				if (product.track.key === key) {
+			favourites.map((product : Track, index : number) => {
+				if (product.key === key) {
 					favourites.splice(index, 1);
 				}
 				return favourites;
@@ -36,7 +37,8 @@ export const removeFromFavourites = (key : string, next: Function) => {
 export const loadFavourites = () => {
 	if (typeof window !== "undefined") {
 		if (localStorage.getItem("favourites")) {
-			return JSON.parse(localStorage.getItem("favourites") || "{}");
+			return JSON.parse(localStorage.getItem("favourites") || "[]");
 		}
+		return []
 	}
 };

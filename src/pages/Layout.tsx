@@ -10,7 +10,7 @@ const Layout = () => {
   const { selectedTrack } = useSelector((state: RootState) => state.playlists);
   return (
     <div className="App">
-      {Object.keys(selectedTrack).length !== 0 && <PlaylistModal />}
+      {!!selectedTrack && <PlaylistModal />}
       <div className="side-bar">
         <SideBar />
       </div>

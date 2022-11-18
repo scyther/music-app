@@ -1,36 +1,40 @@
 import React, { useState } from "react";
-import { TrackObject } from "../interfaces/search";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 import { addToFavourites, removeFromFavourites } from "../utils/favourites";
-// import { Navigate } from "react-router-dom";
+import "./TrackCard.css";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { toggleReload } from "../redux/favourites";
+import favourites, { setFavourites, toggleReload } from "../redux/favourites";
 import { RootState } from "../redux/store";
 import { setSelectedTrack } from "../redux/playlists";
+import { Track } from "../interfaces/corousel";
 
-const TrackCard: React.FC<{ item: TrackObject; inFavourites?: boolean }> = ({
+const TrackCard: React.FC<{ item: Track; inFavourites?: boolean }> = ({
   item,
   inFavourites = false,
 }) => {
   const dispatch = useDispatch();
-  const { reload } = useSelector((state: RootState) => state.favourites);
+  const { reload, favourites } = useSelector(
+    (state: RootState) => state.favourites
+  );
   const [addedToFavourites, setAddedToFavourites] =
     useState<boolean>(inFavourites);
-  // const [redirect, setRedirect] = useState<boolean>(false);
-
-  const toggleFavourite = (item: TrackObject) => {
+  const toggleFavourite = (item: Track) => {
     if (!addedToFavourites) {
       return addToFavourites(item, () => {
         // setRedirect(true);
         setAddedToFavourites(true);
+
         dispatch(toggleReload(reload));
       });
     }
-    removeFromFavourites(item.track.key, () => {
+    removeFromFavourites(item.key, () => {
       setAddedToFavourites(false);
+      dispatch(
+        setFavourites(favourites.filter((track) => track.key !== item.key))
+      );
       dispatch(toggleReload(reload));
     });
   };
@@ -39,27 +43,16 @@ const TrackCard: React.FC<{ item: TrackObject; inFavourites?: boolean }> = ({
   // }
   return (
     <div
-      className="card d-flex flex-column d-flex justify-content-between"
-      style={{ height: "470px" }}
+      className="card d-flex flex-column d-flex justify-content-between border-0"
+      style={{ maxHeight: "470px" }}
     >
-      
       <img
         width="100%"
-        src={item.track.images.coverart}
-        alt={item.track.key}
+        src={item.images.coverart}
+        alt={item.key}
         className="card-img-top"
       />
       <div className="card-body d-flex flex-column justify-content-between">
-        <div className="card-text ">
-          <figure className="text-center">
-            <blockquote className="blockquote">
-              <p className="fs-6 ">{item.track.title}</p>
-            </blockquote>
-            <figcaption className="blockquote-footer">
-              <p>{item.track.subtitle}</p>
-            </figcaption>
-          </figure>
-        </div>
         <div className="d-flex justify-content-between">
           <button
             onClick={() => {
@@ -71,9 +64,9 @@ const TrackCard: React.FC<{ item: TrackObject; inFavourites?: boolean }> = ({
               outline: "none",
             }}
           >
-            {addedToFavourites ? (
+            {(favourites.find((fav) => fav.key === item.key) ? true : false) ? (
               <>
-                <AiFillHeart fill="#D82E2F" /> Liked
+                <AiFillHeart fill="#D82E2F" />
               </>
             ) : (
               <AiOutlineHeart />
@@ -81,8 +74,7 @@ const TrackCard: React.FC<{ item: TrackObject; inFavourites?: boolean }> = ({
           </button>
           <button
             onClick={() => {
-              dispatch(setSelectedTrack(item))
-              // toggleFavourite(item);
+              dispatch(setSelectedTrack(item));
             }}
             style={{
               border: "none",
@@ -92,14 +84,13 @@ const TrackCard: React.FC<{ item: TrackObject; inFavourites?: boolean }> = ({
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
           >
-            {addedToFavourites ? (
-              <>
-                <TbPlaylist /> Add to Playlist
-              </>
-            ) : (
-              <AiOutlineHeart />
-            )}
+            <TbPlaylist />
           </button>
+        </div>
+        <div className="card-text ">
+          <figure className="text-center ">
+            <p className="fs-6 ">{item.title}</p>
+          </figure>
         </div>
       </div>
     </div>

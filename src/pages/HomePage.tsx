@@ -1,9 +1,20 @@
-import SongsCaraousel from "../components/SongsCaraousel";
+import Playlists from "./Playlists";
+import Favourites from "./Favourites";
 
 const HomePage = () => {
   return (
-    <div>
-      <SongsCaraousel listID="genre-global-chart-1" name="Pop" />
+    <div
+      className="container"
+      style={{
+        overflow: "auto",
+        minHeight: "-webkit-fill-available",
+        maxHeight: "100%",
+        paddingTop: "30px",
+        paddingRight: "auto",
+      }}
+    >
+      <Favourites />
+      <Playlists isHome={true} />
     </div>
   );
 };

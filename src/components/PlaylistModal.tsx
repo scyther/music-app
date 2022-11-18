@@ -2,32 +2,33 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedTrack } from "../redux/playlists";
+import { setSelectedTrack, toggleReload } from "../redux/playlists";
 import { RootState } from "../redux/store";
 import { addToPlaylist } from "../utils/playlists";
 
 const PlaylistModal: React.FC = () => {
   const dispatch = useDispatch();
-  const { selectedTrack, pNames } = useSelector(
+  const { selectedTrack, pNames, reloader } = useSelector(
     (state: RootState) => state.playlists
   );
-  const [saveToPlaylist, setSaveToPlaylist] = useState("Default PlayList");
+  const [saveToPlaylist, setSaveToPlaylist] = useState("Default");
   const handleAddToPlaylist = () => {
-    addToPlaylist(saveToPlaylist, selectedTrack, () =>
-      dispatch(setSelectedTrack({}))
-    );
+    addToPlaylist(saveToPlaylist, selectedTrack, () => {
+      dispatch(setSelectedTrack(undefined));
+      dispatch(toggleReload(reloader));
+    });
   };
   return (
     <Modal
-      show={Object.keys(selectedTrack).length !== 0}
-      onHide={() => dispatch(setSelectedTrack({}))}
+      show={!!selectedTrack}
+      onHide={() => dispatch(setSelectedTrack(undefined))}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-        Select Playlist
+          Select Playlist
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -36,9 +37,10 @@ const PlaylistModal: React.FC = () => {
           value={saveToPlaylist}
           onChange={(e) => setSaveToPlaylist(e.target.value)}
         >
-          <option selected>Default PlayList</option>
-          {pNames.map((playlistName) => (
-            <option value={playlistName}>{playlistName}</option>
+          {pNames?.map((playlistName) => (
+            <option key={playlistName} value={playlistName}>
+              {playlistName}
+            </option>
           ))}
         </select>
       </Modal.Body>

@@ -1,38 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PlaylistCorousel from "../components/PlaylistCorousel";
-import { setPNames } from "../redux/playlists";
+import { setPNames, setPlaylistsData } from "../redux/playlists";
 import { RootState } from "../redux/store";
 import {
-  loadPlaylist,
   loadPlaylistNames,
   updatePlaylistName,
 } from "../utils/playlists";
-const Playlists = () => {
-  const dispatch = useDispatch()
+const Playlists = ({ isHome = false }) => {
+  const dispatch = useDispatch();
   const [pName, setPName] = useState<string>("");
-  // const [pNames, setPNames] = useState<string[]>([]);
-  const {pNames, reload } = useSelector((state: RootState) => state.playlists);
-  // const [playlists, setPlaylists] = useState({});
+  const { pNames, reloader } = useSelector((state: RootState) => state.playlists);
   const createPlaylist = () => {
     updatePlaylistName(pName, () => setPName(""));
-    dispatch(setPNames([...pNames, pName])) ;
+    dispatch(setPNames([...pNames, pName]));
   };
 
   useEffect(() => {
-    dispatch(setPNames(loadPlaylistNames()));
-  }, [ reload , dispatch]);
-
-  // useEffect(() => {
-  //   let tempPlaylists = playlists;
-  //   pNames.forEach((playlistName) => {
-  //     tempPlaylists = {
-  //       ...playlists,
-  //       playlistName: loadPlaylist(playlistName),
-  //     };
-  //   });
-  //   setPlaylists(tempPlaylists)
-  // }, [pNames, playlists]);
+    updatePlaylistName("Default", () =>
+      dispatch(setPNames(loadPlaylistNames()))
+    );
+  }, [reloader, dispatch]);
 
   return (
     <div
@@ -43,33 +31,37 @@ const Playlists = () => {
         maxHeight: "100%",
         paddingTop: "30px",
         paddingRight: "auto",
+        paddingBottom: "30px",
       }}
     >
-      <div className="input-group mb-3 container " style={{ width: "400px" }}>
-        <input
-          type="text"
-          className="form-control unfocus-input"
-          placeholder="Playlist Name"
-          aria-label="Playlist Name"
-          aria-describedby="basic-addon2"
-          value={pName}
-          onChange={(e) => {
-            setPName(e.target.value);
-          }}
-        />
-        <button
-          className="input-group-text btn btn-dark btn-focus-width"
-          id="basic-addon2"
-          onClick={createPlaylist}
-        >
-          Create PlayList
-        </button>
-      </div>
+      {!isHome && (
+        <div className="input-group mb-3 container " style={{ width: "400px" }}>
+          <input
+            type="text"
+            className="form-control unfocus-input"
+            placeholder="Playlist Name"
+            aria-label="Playlist Name"
+            aria-describedby="basic-addon2"
+            value={pName}
+            onChange={(e) => {
+              setPName(e.target.value);
+            }}
+          />
+          <button
+            className="input-group-text btn btn-dark btn-focus-width"
+            id="basic-addon2"
+            onClick={createPlaylist}
+          >
+            Create PlayList
+          </button>
+        </div>
+      )}
       <div>
-        {pNames.map((playlistName) => (
+        {pNames?.map((playlistName) => (
           <PlaylistCorousel
+            key={playlistName}
             name={playlistName}
-            data={loadPlaylist(playlistName) || []}
+            isHome={isHome}
           />
         ))}
       </div>
