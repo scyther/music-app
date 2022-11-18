@@ -2,7 +2,7 @@
 
 ## Dev Setup
 
-Set up KeyCloak Container using this command
+Set up KeyCloak Container using this resource
 
 
 [https://www.keycloak.org/getting-started/getting-started-docker](https://www.keycloak.org/getting-started/getting-started-docker)
